@@ -117,3 +117,12 @@ function tileClicked() {
         endTheGame(); // End the game if a reporter is clicked
     }
 }
+
+// End the game
+function endTheGame() {
+    if (gameOver) return; // Do nothing if the game is already over
+
+    gameOver = true; // Set the game over flag
+    document.getElementById("score").innerText = "Game Over! Final Score: " + score; // Show the final score
+
+}

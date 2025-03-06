@@ -14,3 +14,15 @@ window.onload = function() {
     document.querySelector(".close").addEventListener("click", closeInstructions); // Add a click event for closing the modal
     window.addEventListener("click", outsideClickCloseModal); // Add event to close modal when clicking outside of it
 }
+
+// Create a 3x3 board with clickable tiles
+function createGameBoard() {
+    let board = document.getElementById("board"); // Get the board element
+    for (let i = 0; i < 9; i++) { // Loop to create 9 tiles
+        let tile = document.createElement("div"); // Create a new tile
+        tile.id = i; // Give each tile a unique ID
+        tile.classList.add("tile"); // Add a class for styling
+        tile.addEventListener("click", tileClicked); // Add a click event to each tile
+        board.appendChild(tile); // Add the tile to the board
+    }
+}

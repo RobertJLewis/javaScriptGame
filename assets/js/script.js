@@ -37,3 +37,15 @@ function createGameBoard() {
 function tileClicked() {
     if (gameOver) return; // Do nothing if the game is over
 }
+
+// Move the politician to a random tile
+function movePolitician() {
+    if (gameOver) return; // Do nothing if the game is over
+
+    // Remove the politician from the previous tile
+    if (politicianTile) {
+        politicianTile.innerHTML = ""; // Clear the old tile
+    }
+
+    
+}

@@ -26,3 +26,7 @@ function createGameBoard() {
         board.appendChild(tile); // Add the tile to the board
     }
 }
+
+function tileClicked() {
+    if (gameOver) return; // Do nothing if the game is over
+}

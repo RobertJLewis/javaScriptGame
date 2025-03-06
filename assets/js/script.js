@@ -83,3 +83,12 @@ function spawnReporters() {
         reporterTiles.push(randomTileNumber); // Track the reporter's tile
     }
 }
+
+// Clear all reporters from the board
+function clearReporters() {
+    reporterTiles.forEach(tileId => {
+        let tile = document.getElementById(tileId);
+        tile.innerHTML = ""; // Clear the tile
+    });
+    reporterTiles = []; // Reset the reporter tiles array
+}

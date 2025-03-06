@@ -92,3 +92,24 @@ function clearReporters() {
     });
     reporterTiles = []; // Reset the reporter tiles array
 }
+
+// Handle what happens when a tile is clicked
+function tileClicked() {
+    if (gameOver) return; // Do nothing if the game is over
+
+    // Check if the clicked tile has the politician
+    if (this == politicianTile) {
+        score += 10; // Increase the score
+        document.getElementById("score").innerText = score; // Update the score display
+
+        // Increment the politician click counter
+        politicianClicks++;
+
+        // Check if the politician has been clicked 3 times
+        if (politicianClicks === 3) {
+            let successSound = document.getElementById("success"); // Get the audio element
+            successSound.play(); // Play the sound
+        }
+    }
+
+}

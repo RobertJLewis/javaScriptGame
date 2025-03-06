@@ -46,6 +46,13 @@ function movePolitician() {
     if (politicianTile) {
         politicianTile.innerHTML = ""; // Clear the old tile
     }
-
     
+    let politician = document.createElement("img"); // Create an image for the politician
+    politician.src = "./trumpFace.png"; // Set the image source
+
+    let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
+    if (reporterTiles.includes(randomTileNumber)) return; // Avoid overlapping with reporters
+
+    politicianTile = document.getElementById(randomTileNumber); // Get the random tile
+    politicianTile.appendChild(politician); // Place the politician on the tile
 }

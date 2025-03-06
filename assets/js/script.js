@@ -179,3 +179,13 @@ document.getElementById("instructionBtn").addEventListener("click", function() {
     const audio = document.getElementById("trumpInstructions");
     audio.play();
 });
+
+// Function to open the instructions modal
+function openInstructions() {
+    document.getElementById("instructionsModal").style.display = "block";
+}
+
+// Function to close the instructions modal
+function closeInstructions() {
+    document.getElementById("instructionsModal").style.display = "none";
+}

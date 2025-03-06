@@ -46,7 +46,7 @@ function movePolitician() {
     if (politicianTile) {
         politicianTile.innerHTML = ""; // Clear the old tile
     }
-    
+
     let politician = document.createElement("img"); // Create an image for the politician
     politician.src = "./trumpFace.png"; // Set the image source
 
@@ -55,4 +55,31 @@ function movePolitician() {
 
     politicianTile = document.getElementById(randomTileNumber); // Get the random tile
     politicianTile.appendChild(politician); // Place the politician on the tile
+}
+
+// Spawn multiple reporters on random tiles
+function spawnReporters() {
+    if (gameOver) return; // Do nothing if the game is over
+
+    // Clear all existing reporters from the board
+    clearReporters();
+
+    // Randomly decide how many reporters to spawn (1 to 3)
+    let numberOfReporters = Math.floor(Math.random() * 3) + 1;
+
+    for (let i = 0; i < numberOfReporters; i++) {
+        let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
+
+        // Avoid overlapping with the politician or other reporters
+        if (randomTileNumber == politicianTile?.id || reporterTiles.includes(randomTileNumber)) {
+            continue; // Skip this tile and try again
+        }
+
+        let reporter = document.createElement("img"); // Create an image for the reporter
+        reporter.src = "./newsPerson.png"; // Set the image source
+
+        let tile = document.getElementById(randomTileNumber); // Get the random tile
+        tile.appendChild(reporter); // Place the reporter on the tile
+        reporterTiles.push(randomTileNumber); // Track the reporter's tile
+    }
 }

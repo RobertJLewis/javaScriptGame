@@ -38,6 +38,21 @@ function tileClicked() {
     if (gameOver) return; // Do nothing if the game is over
 }
 
+// Start the countdown timer for the game
+function startCountdownTimer() {
+    let timer = setInterval(function() {
+        if (gameOver) return; // Stop the timer if the game is over
+
+        timeLeft--; // Decrease the time left by 1 second
+        document.getElementById("time").innerText = timeLeft; // Update the time display
+
+        if (timeLeft == 0) {
+            endTheGame(); // End the game when time runs out
+            clearInterval(timer); // Stop the countdown timer
+        }
+    }, 1000); // Every 1 second
+}
+
 // Move the politician to a random tile
 function movePolitician() {
     if (gameOver) return; // Do nothing if the game is over

@@ -173,3 +173,9 @@ function restartGame() {
 
     setupGame(); // Restart the game
 }
+
+// Instruction sound
+document.getElementById("instructionBtn").addEventListener("click", function() {
+    const audio = document.getElementById("trumpInstructions");
+    audio.play();
+});

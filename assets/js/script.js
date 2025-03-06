@@ -22,7 +22,7 @@ function setupGame() {
     startCountdownTimer(); // Start the countdown timer
 }
 
-// Create a 3x3 board with clickable tiles
+// Create a simple 3x3 game board with clickable tiles
 function createGameBoard() {
     let board = document.getElementById("board"); // Get the board element
     for (let i = 0; i < 9; i++) { // Loop to create 9 tiles
@@ -34,8 +34,20 @@ function createGameBoard() {
     }
 }
 
-function tileClicked() {
-    if (gameOver) return; // Do nothing if the game is over
+// Start the timers for moving the politician and reporters 
+// JavaScript builtin methon if you havnt lost yet it will call a function -move politician (trump)
+function startMovingTimers() {
+    setInterval(function() {
+        if (!gameOver) {
+            movePolitician(); // Move the politician every second
+        }
+    }, 1000); // Every 1 second
+
+    setInterval(function() {
+        if (!gameOver) {
+            spawnReporters(); // Spawn reporters every 2 seconds
+        }
+    }, 2000); // Every 2 seconds
 }
 
 // Start the countdown timer for the game
@@ -138,7 +150,7 @@ function endTheGame() {
     if (gameOver) return; // Do nothing if the game is already over
 
     gameOver = true; // Set the game over flag
-    document.getElementById("score").innerText = "Game Over! Final Score: " + score; // Show the final score
+    document.getElementById("score").innerText = "Game Over! Final Score: " + score + " " + "Points"; // Show the final score
 
     // Play the game over sound
     let gameOverLosingSound = document.getElementById("gameOverLosingSound"); // Selecting sounds from HTML (losing)
@@ -179,6 +191,11 @@ document.getElementById("instructionBtn").addEventListener("click", function() {
     const audio = document.getElementById("trumpInstructions");
     audio.play();
 });
+// Trump mute sound
+document.getElementById("muteIcon").addEventListener("click", function() {
+    const audio = document.getElementById("muteSound");
+    audio.play();
+  });
 
 // Function to open the instructions modal
 function openInstructions() {
@@ -189,3 +206,16 @@ function openInstructions() {
 function closeInstructions() {
     document.getElementById("instructionsModal").style.display = "none";
 }
+
+/**
+* close modal
+*/
+function outsideClickCloseModal(event) {
+    if (event.target == document.getElementById("instructionsModal")) {
+        closeInstructions(); 
+    }
+}
+
+/**
+* This is docstring that says what the function does
+*/

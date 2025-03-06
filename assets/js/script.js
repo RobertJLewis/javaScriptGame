@@ -125,4 +125,13 @@ function endTheGame() {
     gameOver = true; // Set the game over flag
     document.getElementById("score").innerText = "Game Over! Final Score: " + score; // Show the final score
 
+    // Play the game over sound
+    let gameOverLosingSound = document.getElementById("gameOverLosingSound"); // Selecting sounds from HTML (losing)
+    let gameOverWinningSound = document.getElementById("gameOverWinningSound"); // Selecting sounds from HTML (Winning)
+
+    if (score >=150) {
+        gameOverWinningSound.play()
+    } else {
+        gameOverLosingSound.play()
+    }
 }

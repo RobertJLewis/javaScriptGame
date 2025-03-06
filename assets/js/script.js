@@ -15,6 +15,13 @@ window.onload = function() {
     window.addEventListener("click", outsideClickCloseModal); // Add event to close modal when clicking outside of it
 }
 
+// Set up the game by creating the board and starting timers
+function setupGame() {
+    createGameBoard(); // Create the tiles for the game
+    startMovingTimers(); // Start moving the politician and reporters
+    startCountdownTimer(); // Start the countdown timer
+}
+
 // Create a 3x3 board with clickable tiles
 function createGameBoard() {
     let board = document.getElementById("board"); // Get the board element

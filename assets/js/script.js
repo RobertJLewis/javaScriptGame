@@ -112,4 +112,8 @@ function tileClicked() {
         }
     }
 
+    // Check if the clicked tile has a reporter
+    else if (reporterTiles.includes(Number(this.id))) {
+        endTheGame(); // End the game if a reporter is clicked
+    }
 }

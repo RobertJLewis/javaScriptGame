@@ -150,3 +150,26 @@ function endTheGame() {
         gameOverLosingSound.play()
     }
 }
+
+/**
+* This function restarts the game
+*/
+function restartGame() {
+    // Reset all variables
+    score = 0;
+    timeLeft = 60;
+    gameOver = false;
+    politicianTile = null;
+    reporterTiles = [];
+    politicianClicks = 0; // Reset the politician click counter
+
+    // Clear the board
+    document.getElementById("board").innerHTML = "";
+    createGameBoard(); // Re-create the game board
+
+    // Reset the score and time display
+    document.getElementById("score").innerText = score;
+    document.getElementById("time").innerText = timeLeft;
+
+    setupGame(); // Restart the game
+}

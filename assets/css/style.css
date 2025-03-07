@@ -63,7 +63,7 @@ h3 {
 #board div {
     width: 180px; 
     height: 180px;
-    background-image: url("/assets/images/podium.png");
+    background-image: url("assets/images/podium.png");
     background-size: cover;
 }
 

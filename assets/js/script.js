@@ -96,15 +96,15 @@ function spawnReporters() {
 
     for (let i = 0; i < numberOfReporters; i++) {
         let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
-    
+
         // Avoid overlapping with the politician or other reporters
         if (randomTileNumber == politicianTile?.id || reporterTiles.includes(randomTileNumber)) {
             continue; // Skip this tile and try again
         }
-    
+
         let reporter = document.createElement("img"); // Create an image for the reporter
         reporter.src = "/assets/images/newsPerson.png"; // Set the image source
-    
+
         let tile = document.getElementById(randomTileNumber); // Get the random tile
         tile.appendChild(reporter); // Place the reporter on the tile
         reporterTiles.push(randomTileNumber); // Track the reporter's tile

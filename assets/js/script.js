@@ -7,20 +7,18 @@ let timeLeft = 60;   // Total game time in seconds
 let politicianClicks = 0; // Track how many times the politician has been clicked
 
 // When the page loads, set up the game
-window.onload = function() {
-    setupGame(); // Call the function to set up the game
+document.addEventListener("DOMContentLoaded", function(){
+    createGameBoard(); // Create the tiles for the game
     document.getElementById("restartBtn").addEventListener("click", restartGame); // Add a click event for restarting the game
     document.getElementById("instructionBtn").addEventListener("click", openInstructions); // Add a click event for opening the modal
     document.querySelector(".close").addEventListener("click", closeInstructions); // Add a click event for closing the modal
     window.addEventListener("click", outsideClickCloseModal); // Add event to close modal when clicking outside of it
-}
+})
 
-// Set up the game by creating the board and starting timers
-function setupGame() {
-    createGameBoard(); // Create the tiles for the game
-    startMovingTimers(); // Start moving the politician and reporters
-    startCountdownTimer(); // Start the countdown timer
-}
+const startBtn = document.getElementById("startBtn").addEventListener("click", function(){
+    startCountdownTimer()
+    startMovingTimers()
+})
 
 // Create a simple 3x3 game board with clickable tiles
 function createGameBoard() {

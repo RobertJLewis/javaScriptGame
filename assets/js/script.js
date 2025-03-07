@@ -236,5 +236,5 @@ function outsideClickCloseModal(event) {
 }
 
 /**
-* This is docstring that says what the function does
+* push test for github
 */

@@ -75,7 +75,7 @@ function movePolitician() {
     }
 
     let politician = document.createElement("img"); // Create an image for the politician
-    politician.src = "/assets/images/trumpFace.png"; // Set the image source
+    politician.src = "assets/images/trumpFace.png"; // Set the image source
 
     let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
     if (reporterTiles.includes(randomTileNumber)) return; // Avoid overlapping with reporters
@@ -103,7 +103,7 @@ function spawnReporters() {
         }
 
         let reporter = document.createElement("img"); // Create an image for the reporter
-        reporter.src = "/assets/images/newsPerson.png"; // Set the image source
+        reporter.src = "assets/images/newsPerson.png"; // Set the image source
 
         let tile = document.getElementById(randomTileNumber); // Get the random tile
         tile.appendChild(reporter); // Place the reporter on the tile

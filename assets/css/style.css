@@ -4,6 +4,7 @@ body {
     background-size: cover;
     background-color: black;
     padding-bottom: 50px;
+    touch-action: pan-x pan-y; /* Stops zdouble tap zoom in on trackpad */
 }
 
 #pap-logo {

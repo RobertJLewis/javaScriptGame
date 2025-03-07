@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    background-size: cover;
+    background-color: black; 
+
+}
+#pap-logo {
+    width: 500px;
+}
+h1, h2,
+div {
+    color: white;
+}
+h3, li,
+p {
+    color: black;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: left;
+}
+h3 {
+    color: black;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+}

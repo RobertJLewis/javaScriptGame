@@ -191,11 +191,30 @@ document.getElementById("instructionBtn").addEventListener("click", function() {
     const audio = document.getElementById("trumpInstructions");
     audio.play();
 });
-// Trump mute sound
+
+// When the mute icon is clicked
 document.getElementById("muteIcon").addEventListener("click", function() {
+    // Get the mute sound element
     const audio = document.getElementById("muteSound");
-    audio.play();
-  });
+
+    // Get all audio elements on the page
+    const allAudio = document.querySelectorAll('audio');
+    
+    // Stop all audio elements that are playing
+    for (let i = 0; i < allAudio.length; i++) {
+        if (!allAudio[i].paused) {
+            allAudio[i].pause();
+        }
+    }
+
+    // If the mute sound is not playing, play it. If it is playing, pause it.
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+});
+
 
 // Function to open the instructions modal
 function openInstructions() {

@@ -31,14 +31,40 @@ The purpose of the site is to provide a fun and engaging game for users to relax
 ### 4.1 Wireframes
 Before diving into the code, I created wireframes to get a solid idea of how the game would look and flow. These wireframes helped me lay out where everything would go on the screen—things like the game board, score tracker, timer, buttons for restarting, and instructions. I made sure to keep it simple and focused on the key elements: the 3x3 grid of clickable tiles. As for the Trump character, I wanted to tie it into the current world vibe, especially with the whole "fake news" thing he’s known for. It just seemed like a fitting touch!
 
+
+
+<!-->Add wire frames (phone & web) images into this section<-->
+<img src="">
+
 ### 4.2 Colour Palette
 For the colors, I wanted to keep it bold and eye-catching but also not too overwhelming. I chose a black background to make the podiums, reported and trump character to stand out. The colors, logos and images give it a bit of a “news channel” vibe while keeping things playful.
+
+<!-->Add in colour pallet image<-->
+<img src="">
+
 
 
 ### 4.3 Typography
 The typography used in the game includes:
 - **Fonts**: Arial, Helvetica, sans-serif
 - **Game instructions**: Arial, Helvetica, sans-serif
+
+--- 
+
+### 4.4 Features & Controlls
+<!-->Add in features, controlls, audio/ voice over<-->
+
+<!-->Add in Hero image and explain the desing and reason<-->
+<img src="assets/images/fakeNewsLogo.png">
+
+<!-->Add trump face & reporter & explain reasoning<-->
+<img src="assets/images/trumpFace.png">
+<img src="assets/images/newsPerson.png">
+
+<!-->Explain model & how to trigger the pop-up<-->
+<img src="">
+
+
 
 ---
 
@@ -93,11 +119,37 @@ Deployment was done early, following lessons and guidance from the Code Institut
 
 ---
 
-## 8. Credits and Acknowledgements
+## 8. Conclusion
+**Future Features**
+<!-->Explain furute ideas and improvements<-->
+
+---
+
+## 9. Credits and Acknowledgements
 - **Game Developer**: Robert Lewis
 - **Sound Effects**: Parrot App (https://www.tryparrotai.com/ai-voice-generator/donald-trump) for Ai-Generated free-to-use trump voice over.
 - **Inspiration**: Classic arcade game Whack-a-Mole.
 - **Images and Icons**: Some custom-made images, and a few taken from the internet but none intended for comerical use.
 - **Special Thanks**: To friends and family who provided feedback during the testing phase, My Code Instatue mentor Spencer, and personal Java Script tutor Nina.
+- **Credits**:
+The following tools and technologies were used:
+
+HTML - used to build main site content
+CSS - used for main content styling
+JavaScript - used for all interactivity within the website
+Google - my starting point for understanding and searching for answers to my questions before other programmes were used & images from the web
+W3schools - a constant source of reference for all html, CSS and BootStrap explanations
+Optimizilla - for image compression
+W3C Markup Validation Service - for the html validation
+W3C CSS Validation Service - for the CSS validation
+Lighthouse - for the performance and accessibility testing
+Grok - An AI tool used for general queries and learning
+Chat-GBT - An AI tool used for understanding where things went wrong, how to fix code and generally used for deeper understanding of JavaScript
+Slack Overflow - for general queries
+MSWord - used for grammar and spelling checking
+Parrot App - For Ai generated voices
+Youtube - Also used for audio
+
+
 
 Thank you for playing **Trump Fake News Face Off**! Enjoy the game and don’t get fooled by the fake news!

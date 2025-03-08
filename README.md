@@ -60,8 +60,8 @@ In my Trump Game, I carefully selected specific audio files to enhance the overa
 This image was selected because it aligns well with the game's theme, capturing the intended mood and atmosphere. The high contrast makes important elements pop, ensuring they grab attention and enhance the player's experience. Its strong visual impact complements the gameplay, creating an engaging environment that is both aesthetically fitting and functionally effective for the game's style and narrative.
 
 - **Playable Icons**
-<img src="assets/images/trumpFace.png" style="width: 100px;">>
-<img src="assets/images/newsPerson.png" style="width: 100px;">>
+<img src="assets/images/trumpFace.png" style="width: 250px;">>
+<img src="assets/images/newsPerson.png" style="width: 250px;">>
 
 - **Pop-up Modal**
 <img src="assets/images/popUpModal.png">

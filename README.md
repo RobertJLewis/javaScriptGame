@@ -133,7 +133,7 @@ For future improvements to the Trump Game, here are a few ideas to enhance both 
 - **Sound Effects**: Parrot App (https://www.tryparrotai.com/ai-voice-generator/donald-trump) for Ai-Generated free-to-use trump voice over.
 - **Inspiration**: Classic arcade game Whack-a-Mole.
 - **Images and Icons**: Some custom-made images, and a few taken from the internet but none intended for comerical use.
-- **Special Thanks**: To friends and family who provided feedback during the testing phase, My Code Instatue mentor Spencer, and personal Java Script tutor Nina.
+- **Special Thanks**: To friends and family who provided feedback during the testing phase, My Code Insitute mentor Spencer, and personal Java Script tutor Nina.
 - **Credits**:
 The following tools and technologies were used:
 

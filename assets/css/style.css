@@ -96,10 +96,6 @@ h3 {
     background-color: white;
     margin: 15%
 }
-
-
-
-/* Add this to your existing CSS */
 .score-container {
     display: flex;
     justify-content: center;

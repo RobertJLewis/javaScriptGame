@@ -4,53 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fake News Face Off</title>
-    <link rel="icon" type="image/png" href="trumpFavicon.png">
+    <link rel="icon" type="image/png" href="assets/images/trumpFavicon.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <img id="pap-logo" src="assets/images/fakeNewsLogo.png" alt="Fake News Face Off Logo">
-    <!-- 3x3 -->
-    <div id="board">
-    </div>
+    <header>
+        <img id="pap-logo" src="assets/images/fakeNewsLogo.png" alt="Fake News Face Off Logo">
+    </header>
 
-    <div>
-        <h2 class="score-container" id="score">Score: 0 Points</h2>
-        <img src="assets/images/muteIcon.png" class="mute-icon" id="muteIcon" alt="Mute Icon">
-    </div>
-    
-    <div class="frontBtn">
-        <button id="restartBtn">RESTART GAME</button>
-        <button id="startBtn">START GAME</button>
-        <button id="instructionBtn">INSTRUCTIONS</button>
-    </div>
-    
-    <!-- Pop-up Modal -->
-    <div id="instructionsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Game Instructions</h3>
-            <p>            
-                Alright folks, here's the deal. The fake news is popping up everywhere, but don't worry—you've got me, and I'm the one with the truth.
+    <main>
+        <div id="board">
+            </div>
 
-                <br><br><strong>News presenters?</strong>
-                They're popping up, trying to distract you, mislead you, but you've got one job: ignore them. You don't waste your time on the fake news.
-                
-                <br><br><strong>What do you do?</strong>
-                You click me, Donald J. Trump, to get those points. That's how you win—you focus on me, and the points are going to rack up, it's going to be YUGE.
-                                
-                <br><br><strong>The Objective?</strong>
-                So stay sharp, stay smart, and keep clicking Trump! Believe me, it's the only way to win. Don't let the media fool you, folks! And who knows, I might even give you one of my shiny gold cards, but not if you'r Mexican. 
-                <br><br><br><br>
-
-            </p>
+        <div class="game-info">
+            <h2 class="score-container" id="score">Score: 0 Points</h2>
+            <h2 class="time-container" id="time">60</h2>
+            <div>
+                <img src="assets/images/unmuted.png" class="mute-icon" id="muteIcon" alt="Mute/Unmute Sound">
+            </div>
         </div>
-    </div>
+        
+        <div class="game-controls frontBtn">
+            <button id="restartBtn">RESTART GAME</button>
+            <button id="startBtn">START GAME</button>
+            <button id="instructionBtn">INSTRUCTIONS</button>
+        </div>
+        
+        <div id="instructionsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Game Instructions</h3>
+                <p>            
+                    Alright folks, here's the deal. The fake news is popping up everywhere, but don't worry you've got me, and I'm the one with the truth.
+                    <br><br><strong>News presenters?</strong>
+                    They're popping up, trying to distract you, mislead you, but you've got one job: ignore them. You don't waste your time on the fake news.
+                    <br><br><strong>What do you do?</strong>
+                    You click me, Donald J. Trump, to get those points. That's how you win you focus on me, and the points are going to rack up, it's going to be YUGE.
+                    <br><br><strong>The Objective?</strong>
+                    So stay sharp, stay smart, and keep clicking Trump! Believe me, it's the only way to win. Don't let the media fool you, folks! And who knows, I might even give you one of my shiny gold cards, but not if you'r Mexican. 
+                    <br><br><br><br>
+                </p>
+            </div>
+        </div>
+    </main>
 
-    <audio id="trumpInstructions" src="assets/audio/trumpInstructions.mp3"></audio>
-    <audio id="muteSound" src="assets/audio/muteSound.mp3"></audio>
-    <audio id="success" src="assets/audio/fakeNews.mp3"></audio>
-    <audio id="gameOverLosingSound" src="assets/audio/gameOverLosingSound.mp3"></audio>
-    <audio id="gameOverWinningSound" src="assets/audio/gameOverWinningSound.mp3"></audio>
+    <footer>
+        <audio id="trumpInstructions" src="assets/audio/trumpInstructions.mp3"></audio>
+        <audio id="success" src="assets/audio/fakeNews.mp3"></audio>
+        <audio id="gameOverLosingSound" src="assets/audio/gameOverLosingSound.mp3"></audio>
+        <audio id="gameOverWinningSound" src="assets/audio/gameOverWinningSound.mp3"></audio>
+    </footer>
 
     <script src="assets/js/script.js"></script>
 </body>

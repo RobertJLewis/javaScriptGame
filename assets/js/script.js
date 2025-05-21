@@ -1,238 +1,323 @@
-// Variables to keep track of the game state
-let politicianTile; // The tile where the politician is
-let reporterTiles = []; // An array to track all active reporter tiles
-let score = 0;       // Player's score
-let gameOver = false; // Is the game over?
-let timeLeft = 60;   // Total game time in seconds
-let politicianClicks = 0; // Track how many times the politician has been clicked
+// Global DOM Element Cache
+let boardElement, scoreDisplay, timeDisplay, startBtnElement, restartBtnElement, instructionBtnElement, muteIconElement, instructionsModal, modalCloseBtn;
+let successSound, gameOverLosingSound, gameOverWinningSound, trumpInstructionsSound; // Main audio elements
+let allGameSounds = []; // Array to hold all manageable game audio elements
 
-// When the page loads, set up the game
-document.addEventListener("DOMContentLoaded", function(){
-    createGameBoard(); // Create the tiles for the game
-    document.getElementById("restartBtn").addEventListener("click", restartGame); // Add a click event for restarting the game
-    document.getElementById("instructionBtn").addEventListener("click", openInstructions); // Add a click event for opening the modal
-    document.querySelector(".close").addEventListener("click", closeInstructions); // Add a click event for closing the modal
-    window.addEventListener("click", outsideClickCloseModal); // Add event to close modal when clicking outside of it
-})
+// Game State Variables
+let politicianTile;
+let reporterTiles = [];
+let score = 0;
+let gameOver = false;
+let timeLeft = 60;
+let politicianClicks = 0;
+let gameStarted = false;
 
-const startBtn = document.getElementById("startBtn").addEventListener("click", function(){
-    startCountdownTimer()
-    startMovingTimers()
-})
+// Interval IDs
+let politicianMoveInterval = null;
+let reporterSpawnInterval = null;
+let countdownTimerInterval = null;
 
-// Create a simple 3x3 game board with clickable tiles
+// Sound State
+let isMuted = false;
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize cached DOM elements
+    boardElement = document.getElementById("board");
+    scoreDisplay = document.getElementById("score");
+    timeDisplay = document.getElementById("time");
+    startBtnElement = document.getElementById("startBtn");
+    restartBtnElement = document.getElementById("restartBtn");
+    instructionBtnElement = document.getElementById("instructionBtn");
+    muteIconElement = document.getElementById("muteIcon");
+    instructionsModal = document.getElementById("instructionsModal");
+    modalCloseBtn = document.querySelector(".close");
+
+    // Initialize audio elements
+    successSound = document.getElementById("success");
+    gameOverLosingSound = document.getElementById("gameOverLosingSound");
+    gameOverWinningSound = document.getElementById("gameOverWinningSound");
+    trumpInstructionsSound = document.getElementById("trumpInstructions");
+
+    // Populate allGameSounds array (add any other game-controlled sounds here if they exist)
+    // Ensure these elements exist in your HTML
+    if (successSound) allGameSounds.push(successSound);
+    if (gameOverLosingSound) allGameSounds.push(gameOverLosingSound);
+    if (gameOverWinningSound) allGameSounds.push(gameOverWinningSound);
+    if (trumpInstructionsSound) allGameSounds.push(trumpInstructionsSound);
+
+
+    // Initial setup
+    createGameBoard();
+    updateScoreAndTimeDisplay();
+
+    // Event Listeners
+    startBtnElement.addEventListener("click", startGame);
+    restartBtnElement.addEventListener("click", restartGame);
+    instructionBtnElement.addEventListener("click", openInstructions);
+    modalCloseBtn.addEventListener("click", closeInstructions);
+    window.addEventListener("click", outsideClickCloseModal);
+    muteIconElement.addEventListener("click", toggleMute);
+});
+
+function playSound(soundToPlay) {
+    if (!soundToPlay) return;
+
+    // Stop all other managed game sounds
+    allGameSounds.forEach(audioEl => {
+        if (audioEl && audioEl !== soundToPlay && !audioEl.paused) {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+        }
+    });
+
+    // Play the requested sound if not muted
+    if (!isMuted) {
+        soundToPlay.currentTime = 0; // Ensure it plays from the start
+        soundToPlay.play().catch(error => {
+            // Autoplay-related errors are common, especially if user hasn't interacted with the page
+            console.error("Error playing sound '" + soundToPlay.id + "':", error);
+        });
+    }
+}
+
+function updateScoreAndTimeDisplay() {
+    if (scoreDisplay) scoreDisplay.innerText = score;
+    if (timeDisplay) timeDisplay.innerText = timeLeft;
+}
+
+function startGame() {
+    if (gameStarted) return;
+
+    gameStarted = true;
+    gameOver = false;
+    startBtnElement.disabled = true;
+
+    score = 0;
+    timeLeft = 60;
+    politicianClicks = 0;
+    updateScoreAndTimeDisplay();
+    clearBoardOfCharacters();
+
+    // Stop any sounds that might be playing (e.g., instructions) when game starts
+    allGameSounds.forEach(audioEl => {
+        if (audioEl && !audioEl.paused) {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+        }
+    });
+
+    startCountdownTimer();
+    startMovingTimers();
+    movePolitician();
+}
+
 function createGameBoard() {
-    let board = document.getElementById("board"); // Get the board element
-    for (let i = 0; i < 9; i++) { // Loop to create 9 tiles
-        let tile = document.createElement("div"); // Create a new tile
-        tile.id = i; // Give each tile a unique ID
-        tile.classList.add("tile"); // Add a class for styling
-        tile.addEventListener("click", tileClicked); // Add a click event to each tile
-        board.appendChild(tile); // Add the tile to the board
+    if (!boardElement) return;
+    boardElement.innerHTML = "";
+    for (let i = 0; i < 9; i++) {
+        let tile = document.createElement("div");
+        tile.id = String(i);
+        tile.classList.add("tile");
+        tile.addEventListener("click", tileClicked);
+        boardElement.appendChild(tile);
     }
 }
 
-// Start the timers for moving the politician and reporters 
-// JavaScript builtin methon if you havnt lost yet it will call a function -move politician (trump)
 function startMovingTimers() {
-    setInterval(function() {
-        if (!gameOver) {
-            movePolitician(); // Move the politician every second
-        }
-    }, 1000); // Every 1 second
+    clearInterval(politicianMoveInterval);
+    clearInterval(reporterSpawnInterval);
 
-    setInterval(function() {
-        if (!gameOver) {
-            spawnReporters(); // Spawn reporters every 2 seconds
-        }
-    }, 2000); // Every 2 seconds
+    politicianMoveInterval = setInterval(function() {
+        if (!gameOver) movePolitician();
+    }, 1000);
+
+    reporterSpawnInterval = setInterval(function() {
+        if (!gameOver) spawnReporters();
+    }, 2000);
 }
 
-// Start the countdown timer for the game
 function startCountdownTimer() {
-    let timer = setInterval(function() {
-        if (gameOver) return; // Stop the timer if the game is over
+    clearInterval(countdownTimerInterval);
 
-        timeLeft--; // Decrease the time left by 1 second
-        document.getElementById("time").innerText = timeLeft; // Update the time display
-
-        if (timeLeft == 0) {
-            endTheGame(); // End the game when time runs out
-            clearInterval(timer); // Stop the countdown timer
+    countdownTimerInterval = setInterval(function() {
+        if (gameOver) {
+            clearInterval(countdownTimerInterval);
+            return;
         }
-    }, 1000); // Every 1 second
+        timeLeft--;
+        if (timeDisplay) timeDisplay.innerText = timeLeft;
+        if (timeLeft <= 0) {
+            timeLeft = 0;
+            if (timeDisplay) timeDisplay.innerText = timeLeft;
+            endTheGame();
+            // clearInterval(countdownTimerInterval); // endTheGame will also clear it
+        }
+    }, 1000);
 }
 
-// Move the politician to a random tile
-function movePolitician() {
-    if (gameOver) return; // Do nothing if the game is over
-
-    // Remove the politician from the previous tile
+function clearBoardOfCharacters() {
     if (politicianTile) {
-        politicianTile.innerHTML = ""; // Clear the old tile
+        politicianTile.innerHTML = "";
+        politicianTile = null;
     }
-
-    let politician = document.createElement("img"); // Create an image for the politician
-    politician.src = "assets/images/trumpFace.png"; // Set the image source
-
-    let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
-    if (reporterTiles.includes(randomTileNumber)) return; // Avoid overlapping with reporters
-
-    politicianTile = document.getElementById(randomTileNumber); // Get the random tile
-    politicianTile.appendChild(politician); // Place the politician on the tile
+    clearReporters();
 }
 
-// Spawn multiple reporters on random tiles
+function movePolitician() {
+    if (gameOver) return;
+    if (politicianTile) politicianTile.innerHTML = "";
+
+    let politicianImg = document.createElement("img");
+    politicianImg.src = "assets/images/trumpFace.png";
+
+    let randomTileNumber, targetTile, attempts = 0;
+    do {
+        randomTileNumber = Math.floor(Math.random() * 9);
+        targetTile = document.getElementById(String(randomTileNumber));
+        attempts++;
+    } while (targetTile && reporterTiles.includes(Number(targetTile.id)) && attempts < 20);
+
+    if (targetTile && reporterTiles.includes(Number(targetTile.id))) return;
+
+    politicianTile = targetTile;
+    if (politicianTile) politicianTile.appendChild(politicianImg);
+}
+
 function spawnReporters() {
-    if (gameOver) return; // Do nothing if the game is over
-
-    // Clear all existing reporters from the board
+    if (gameOver) return;
     clearReporters();
-
-    // Randomly decide how many reporters to spawn (1 to 3)
     let numberOfReporters = Math.floor(Math.random() * 3) + 1;
 
     for (let i = 0; i < numberOfReporters; i++) {
-        let randomTileNumber = Math.floor(Math.random() * 9); // Pick a random tile number (0-8)
+        let randomTileNumber, tile, attempts = 0;
+        do {
+            randomTileNumber = Math.floor(Math.random() * 9);
+            tile = document.getElementById(String(randomTileNumber));
+            attempts++;
+        } while (tile && ((politicianTile && randomTileNumber == politicianTile.id) || reporterTiles.includes(randomTileNumber)) && attempts < 20);
+        
+        if (tile && ((politicianTile && randomTileNumber == politicianTile.id) || reporterTiles.includes(randomTileNumber))) continue;
 
-        // Avoid overlapping with the politician or other reporters
-        if (randomTileNumber == politicianTile?.id || reporterTiles.includes(randomTileNumber)) {
-            continue; // Skip this tile and try again
+        let reporterImg = document.createElement("img");
+        reporterImg.src = "assets/images/newsPerson.png";
+        if (tile) {
+            tile.appendChild(reporterImg);
+            reporterTiles.push(randomTileNumber);
         }
-
-        let reporter = document.createElement("img"); // Create an image for the reporter
-        reporter.src = "assets/images/newsPerson.png"; // Set the image source
-
-        let tile = document.getElementById(randomTileNumber); // Get the random tile
-        tile.appendChild(reporter); // Place the reporter on the tile
-        reporterTiles.push(randomTileNumber); // Track the reporter's tile
     }
 }
 
-// Clear all reporters from the board
 function clearReporters() {
     reporterTiles.forEach(tileId => {
-        let tile = document.getElementById(tileId);
-        tile.innerHTML = ""; // Clear the tile
+        let tile = document.getElementById(String(tileId));
+        if (tile) tile.innerHTML = "";
     });
-    reporterTiles = []; // Reset the reporter tiles array
+    reporterTiles = [];
 }
 
-// Handle what happens when a tile is clicked
 function tileClicked() {
-    if (gameOver) return; // Do nothing if the game is over
+    if (gameOver || !gameStarted) return;
 
-    // Check if the clicked tile has the politician
     if (this == politicianTile) {
-        score += 10; // Increase the score
-        document.getElementById("score").innerText = score; // Update the score display
-
-        // Increment the politician click counter
+        score += 10;
+        if (scoreDisplay) scoreDisplay.innerText = score;
         politicianClicks++;
-
-        // Check if the politician has been clicked 3 times
         if (politicianClicks === 3) {
-            let successSound = document.getElementById("success"); // Get the audio element
-            successSound.play(); // Play the sound
+            playSound(successSound); // Use playSound
+            // Reset politicianClicks if you want the sound to play every 3 clicks,
+            // or let it continue counting if it's a one-time sound after the first 3.
+            // politicianClicks = 0; // Optional: uncomment to make it every 3 clicks
         }
-    }
-
-    // Check if the clicked tile has a reporter
-    else if (reporterTiles.includes(Number(this.id))) {
-        endTheGame(); // End the game if a reporter is clicked
+        movePolitician();
+    } else if (reporterTiles.includes(Number(this.id))) {
+        endTheGame();
     }
 }
 
-// End the game
 function endTheGame() {
-    if (gameOver) return; // Do nothing if the game is already over
+    if (gameOver) return;
+    gameOver = true;
+    gameStarted = false;
+    if(startBtnElement) startBtnElement.disabled = false;
 
-    gameOver = true; // Set the game over flag
-    document.getElementById("score").innerText = "Game Over! Final Score: " + score + " " + "Points"; // Show the final score
+    clearInterval(politicianMoveInterval);
+    clearInterval(reporterSpawnInterval);
+    clearInterval(countdownTimerInterval);
 
-    // Play the game over sound
-    let gameOverLosingSound = document.getElementById("gameOverLosingSound"); // Selecting sounds from HTML (losing)
-    let gameOverWinningSound = document.getElementById("gameOverWinningSound"); // Selecting sounds from HTML (Winning)
+    if (scoreDisplay) scoreDisplay.innerText = "Game Over! Final Score: " + score + " Points";
 
-    if (score >=150) {
-        gameOverWinningSound.play()
+    if (score >= 150) {
+        playSound(gameOverWinningSound); // Use playSound
     } else {
-        gameOverLosingSound.play()
+        playSound(gameOverLosingSound); // Use playSound
     }
 }
 
-/**
-* This function restarts the game
-*/
 function restartGame() {
-    // Reset all variables
+    clearInterval(politicianMoveInterval);
+    clearInterval(reporterSpawnInterval);
+    clearInterval(countdownTimerInterval);
+
+    // Stop any sounds
+    allGameSounds.forEach(audioEl => {
+        if (audioEl && !audioEl.paused) {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+        }
+    });
+
     score = 0;
     timeLeft = 60;
     gameOver = false;
     politicianTile = null;
     reporterTiles = [];
-    politicianClicks = 0; // Reset the politician click counter
+    politicianClicks = 0;
+    gameStarted = false;
 
-    // Clear the board
-    document.getElementById("board").innerHTML = "";
-    createGameBoard(); // Re-create the game board
+    updateScoreAndTimeDisplay();
+    clearBoardOfCharacters();
+    if (boardElement) boardElement.innerHTML = "";
+    createGameBoard();
 
-    // Reset the score and time display
-    document.getElementById("score").innerText = score;
-    document.getElementById("time").innerText = timeLeft;
-
-    setupGame(); // Restart the game
+    if(startBtnElement) startBtnElement.disabled = false;
+    if (scoreDisplay) scoreDisplay.innerText = score;
 }
 
-// Instruction sound
-document.getElementById("instructionBtn").addEventListener("click", function() {
-    const audio = document.getElementById("trumpInstructions");
-    audio.play();
-});
-
-// When the mute icon is clicked
-document.getElementById("muteIcon").addEventListener("click", function() {
-    // Get the mute sound element
-    const audio = document.getElementById("muteSound");
-
-    // Get all audio elements on the page
-    const allAudio = document.querySelectorAll('audio');
-    
-    // Stop all audio elements that are playing
-    for (let i = 0; i < allAudio.length; i++) {
-        if (!allAudio[i].paused) {
-            allAudio[i].pause();
-        }
-    }
-
-    // If the mute sound is not playing, play it. If it is playing, pause it.
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
-});
-
-
-// Function to open the instructions modal
 function openInstructions() {
-    document.getElementById("instructionsModal").style.display = "block";
+    if (instructionsModal) instructionsModal.style.display = "block";
+    playSound(trumpInstructionsSound); // Use playSound
 }
 
-// Function to close the instructions modal
 function closeInstructions() {
-    document.getElementById("instructionsModal").style.display = "none";
-}
-
-/**
-* close modal
-*/
-function outsideClickCloseModal(event) {
-    if (event.target == document.getElementById("instructionsModal")) {
-        closeInstructions(); 
+    if (instructionsModal) instructionsModal.style.display = "none";
+    // Optionally stop instructions sound if it's playing and modal is closed
+    if (trumpInstructionsSound && !trumpInstructionsSound.paused) {
+        trumpInstructionsSound.pause();
+        trumpInstructionsSound.currentTime = 0;
     }
 }
 
-/**
-* push test for github
-*/
+function outsideClickCloseModal(event) {
+    if (instructionsModal && event.target == instructionsModal) {
+        closeInstructions();
+    }
+}
+
+function toggleMute() {
+    isMuted = !isMuted;
+
+    if (muteIconElement) {
+        muteIconElement.src = isMuted ? "assets/images/muteIcon.png" : "assets/images/unMuted.png" ;
+    }
+
+    // Apply mute state to all audio elements
+    const allAudioTags = document.querySelectorAll('audio');
+    allAudioTags.forEach(audio => {
+        audio.muted = isMuted;
+    });
+
+    // If unmuting, sounds won't autoplay; they play when triggered by playSound.
+    // If muting, currently playing sound (managed by playSound) will become silent.
+    // If a sound was playing and is muted, and then playSound tries to play another sound,
+    // the first sound will be stopped by playSound's logic.
+}

@@ -75,6 +75,10 @@ The game underwent multiple stages of testing, including:
 - **Functional testing**: Ensuring that clicking Trump increases the score and clicking reporters ends the game.
 - **Timing issues**: Adjusting how often Trump and reporters spawn to create a balanced gameplay experience.
 - **Sound testing**: Verifying that the sound effects play correctly when Trump is clicked and when the game ends.
+- **Game freezing bug**: A bug was encountered where the game would freeze if multiple elements were clicked too quickly. This was traced to overlapping event listeners and timers. The solution involved debouncing the click events and ensuring each target could only be clicked once per appearance.
+
+-**Score display issue** There was a problem where the score wouldn't update in real time due to DOM rendering delays. This was fixed by forcing the score update to occur immediately after the score was incremented, rather than at a fixed interval.
+
 - **Browser compatibility**: Ensuring the game works on major browsers like Chrome, Firefox, and Safari.
 - **Mobile responsiveness**: Testing how the game behaves on different screen sizes, adjusting for mobile gameplay.
 
